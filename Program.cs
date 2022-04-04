@@ -1,10 +1,13 @@
-﻿//SHOPPING LIST BACKEND
+﻿//M70 SERVICE BACKLOG BACKEND
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ProductDb>(opt => opt.UseInMemoryDatabase("ProductList"));
+builder.Services.AddDbContext<ProductDb>(opt => opt.UseInMemoryDatabase("ProductList")); //products schema
+
+builder.Services.AddDbContext<ServicesDB>(opt => opt.UseInMemoryDatabase("ServiceList"));
+
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDirectoryBrowser();
 var app = builder.Build();
@@ -13,8 +16,78 @@ var app = builder.Build();
 app.UseDefaultFiles(); app.UseStaticFiles();
 
 
+
+
+/* 
+ SERVICES METHODS
+
+
+ public int Id { get; set; }
+    public string? Date { get; set; }
+    public bool Completed { get; set; }
+    public float Fee { get; set; }
+    public int Tel { get; set; }
+
+
+*/
+app.MapGet("/api/v1/services", async (ServicesDB db) =>
+    await db.Service.ToListAsync());
+
+app.MapPost("/api/v1/services", async (Service service, ServicesDB db) => {
+    db.Service.Add(service);
+    await db.SaveChangesAsync();
+    return Results.Created($"/products/{service.Id}", service);
+});
+
+//GET COMPLETE
+app.MapGet("/api/v1/services/completed", async (ServicesDB db) =>
+    await db.Service.Where(t => t.Completed).ToListAsync());
+
+//GET SPECIFIC SERVICE ITEM
+app.MapGet("/api/v1/services/{id}", async (int id, ServicesDB db) =>
+    await db.Service.FindAsync(id)
+        is Service service
+            ? Results.Ok(service)
+            : Results.NotFound());
+
+//UPDATE SPECIFIC SERVICE RECORD
+app.MapPut("/api/v1/services/{id}", async (int id, Service inputService, ServicesDB db) => {
+    var service = await db.Service.FindAsync(id);
+    if (service is null) return Results.NotFound();
+    service.Date = inputService.Date;
+    service.Completed = inputService.Completed;
+    service.Fee = inputService.Fee;
+    service.Tel = inputService.Tel;
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+
+//REMOVE SPECIFIC RECORD
+app.MapDelete("/api/v1/services/{id}", async (int id, ServicesDB db) => {
+    if (await db.Service.FindAsync(id) is Service service)
+    {
+        db.Service.Remove(service);
+        await db.SaveChangesAsync();
+        return Results.Ok(service);
+    }
+    return Results.NotFound();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //ALL GET METHODS HERE___________________________________________________
-//GET ALL PRODUCTS
+//GET ALL SERVICES
 app.MapGet("/api/v1/products", async (ProductDb db) =>
     await db.Product.ToListAsync());
 
@@ -81,4 +154,23 @@ class ProductDb : DbContext
     public ProductDb(DbContextOptions<ProductDb> options)
         : base(options) { }
     public DbSet<Product> Product => Set<Product>();
+}
+
+
+
+//SERVICE SCHEMA & IN MEMORY DATABASE
+class Service
+{
+    public int Id { get; set; }
+    public string? Date { get; set; }
+    public bool Completed { get; set; }
+    public float Fee { get; set; }
+    public int Tel { get; set; }
+}
+
+class ServicesDB : DbContext
+{
+    public ServicesDB(DbContextOptions<ServicesDB> options)
+        : base(options) { }
+    public DbSet<Service> Service => Set<Service>();
 }

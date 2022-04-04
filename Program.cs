@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ProductDb>(opt => opt.UseInMemoryDatabase("ProductList")); //products schema
 
-builder.Services.AddDbContext<ServicesDB>(opt => opt.UseInMemoryDatabase("ServiceList"));
+
+builder.Services.AddDbContext<ServicesDB>(opt => opt.UseInMemoryDatabase("ServiceList")); //service db & schema
+builder.Services.AddDbContext<SoftwareDB>(opt => opt.UseInMemoryDatabase("SoftwareList")); //software upgrades db & schema
+builder.Services.AddDbContext<RepairDB>(opt => opt.UseInMemoryDatabase("Repairlist")); //software upgrades db & schema
+
 
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDirectoryBrowser();
@@ -20,20 +23,11 @@ app.UseDefaultFiles(); app.UseStaticFiles();
 
 /* 
  SERVICES METHODS
-
-
- public int Id { get; set; }
-    public string? Date { get; set; }
-    public bool Completed { get; set; }
-    public float Fee { get; set; }
-    public int Tel { get; set; }
-
-
 */
 app.MapGet("/api/v1/services", async (ServicesDB db) =>
     await db.Service.ToListAsync());
 
-app.MapPost("/api/v1/services", async (Service service, ServicesDB db) => {
+app.MapPost("/api/v1/services", async (Record service, ServicesDB db) => {
     db.Service.Add(service);
     await db.SaveChangesAsync();
     return Results.Created($"/products/{service.Id}", service);
@@ -46,12 +40,12 @@ app.MapGet("/api/v1/services/completed", async (ServicesDB db) =>
 //GET SPECIFIC SERVICE ITEM
 app.MapGet("/api/v1/services/{id}", async (int id, ServicesDB db) =>
     await db.Service.FindAsync(id)
-        is Service service
+        is Record service
             ? Results.Ok(service)
             : Results.NotFound());
 
 //UPDATE SPECIFIC SERVICE RECORD
-app.MapPut("/api/v1/services/{id}", async (int id, Service inputService, ServicesDB db) => {
+app.MapPut("/api/v1/services/{id}", async (int id, Record inputService, ServicesDB db) => {
     var service = await db.Service.FindAsync(id);
     if (service is null) return Results.NotFound();
     service.Date = inputService.Date;
@@ -64,7 +58,7 @@ app.MapPut("/api/v1/services/{id}", async (int id, Service inputService, Service
 
 //REMOVE SPECIFIC RECORD
 app.MapDelete("/api/v1/services/{id}", async (int id, ServicesDB db) => {
-    if (await db.Service.FindAsync(id) is Service service)
+    if (await db.Service.FindAsync(id) is Record service)
     {
         db.Service.Remove(service);
         await db.SaveChangesAsync();
@@ -75,62 +69,48 @@ app.MapDelete("/api/v1/services/{id}", async (int id, ServicesDB db) => {
 
 
 
+/* 
+ SOFTWARE-UPGRADES METHODS
+*/
+app.MapGet("/api/v1/software", async (SoftwareDB db) =>
+    await db.Software.ToListAsync());
 
-
-
-
-
-
-
-
-
-
-
-//ALL GET METHODS HERE___________________________________________________
-//GET ALL SERVICES
-app.MapGet("/api/v1/products", async (ProductDb db) =>
-    await db.Product.ToListAsync());
-
-//SHOW PURCHASED PRODUCTS
-app.MapGet("/api/v1/products/purchased", async (ProductDb db) =>
-    await db.Product.Where(t => t.IsPurchased).ToListAsync());
-
-//SHOW SPECIFIC PRODUCT
-app.MapGet("/api/v1/todoitems/{id}", async (int id, ProductDb db) =>
-    await db.Product.FindAsync(id)
-        is Product product
-            ? Results.Ok(product)
-            : Results.NotFound());
-
-
-
-//ALL POST,PUT,DELETE METHODS HERE_______________________________________
-//ADD PRODUCT
-app.MapPost("/api/v1/products", async (Product product, ProductDb db) => {
-    db.Product.Add(product);
+app.MapPost("/api/v1/software", async (Record software, SoftwareDB db) => {
+    db.Software.Add(software);
     await db.SaveChangesAsync();
-    return Results.Created($"/products/{product.Id}", product);
+    return Results.Created($"/products/{software.Id}", software);
 });
 
-//UPDATE CART
-app.MapPut("/api/v1/products/{id}", async (int id, Product inputProduct, ProductDb db) => {
-    var product = await db.Product.FindAsync(id);
-    if (product is null) return Results.NotFound();
-    product.Name = inputProduct.Name;
-    product.IsPurchased = inputProduct.IsPurchased;
-    product.Price = inputProduct.Price;
-    product.Qty = inputProduct.Qty;
+//GET COMPLETE
+app.MapGet("/api/v1/software/completed", async (SoftwareDB db) =>
+    await db.Software.Where(t => t.Completed).ToListAsync());
+
+//GET SPECIFIC SERVICE ITEM
+app.MapGet("/api/v1/software/{id}", async (int id, SoftwareDB db) =>
+    await db.Software.FindAsync(id)
+        is Record software
+            ? Results.Ok(software)
+            : Results.NotFound());
+
+//UPDATE SPECIFIC SERVICE RECORD
+app.MapPut("/api/v1/software/{id}", async (int id, Record inputSoftware, SoftwareDB db) => {
+    var software = await db.Software.FindAsync(id);
+    if (software is null) return Results.NotFound();
+    software.Date = inputSoftware.Date;
+    software.Completed = inputSoftware.Completed;
+    software.Fee = inputSoftware.Fee;
+    software.Tel = inputSoftware.Tel;
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
 
-//REMOVE PRODUCT
-app.MapDelete("/api/v1/products/{id}", async (int id, ProductDb db) => {
-    if (await db.Product.FindAsync(id) is Product product)
+//REMOVE SPECIFIC RECORD
+app.MapDelete("/api/v1/software/{id}", async (int id, SoftwareDB db) => {
+    if (await db.Software.FindAsync(id) is Record software)
     {
-        db.Product.Remove(product);
+        db.Software.Remove(software);
         await db.SaveChangesAsync();
-        return Results.Ok(product);
+        return Results.Ok(software);
     }
     return Results.NotFound();
 });
@@ -138,28 +118,21 @@ app.MapDelete("/api/v1/products/{id}", async (int id, ProductDb db) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
 app.Run();
 
-class Product
-{
-    public int Id { get; set; }
-    public string? Name { get; set; }
-    public bool IsPurchased { get; set; }
-    public float Price { get; set; }
-    public int Qty { get; set; }
-}
 
-class ProductDb : DbContext
-{
-    public ProductDb(DbContextOptions<ProductDb> options)
-        : base(options) { }
-    public DbSet<Product> Product => Set<Product>();
-}
-
-
-
-//SERVICE SCHEMA & IN MEMORY DATABASE
-class Service
+//RECORD SCHEMA
+class Record
 {
     public int Id { get; set; }
     public string? Date { get; set; }
@@ -168,9 +141,28 @@ class Service
     public int Tel { get; set; }
 }
 
+//SERVICES IN MEM DB
 class ServicesDB : DbContext
 {
     public ServicesDB(DbContextOptions<ServicesDB> options)
         : base(options) { }
-    public DbSet<Service> Service => Set<Service>();
+    public DbSet<Record> Service => Set<Record>();
+}
+
+
+//SOFTWARE UPGRADES IN MEM DB
+class SoftwareDB : DbContext
+{
+    public SoftwareDB(DbContextOptions<SoftwareDB> options)
+        : base(options) { }
+    public DbSet<Record> Software => Set<Record>();
+}
+
+
+//REPAIR IN MEM DB
+class RepairDB : DbContext
+{
+    public RepairDB(DbContextOptions<SoftwareDB> options)
+        : base(options) { }
+    public DbSet<Record> Repair => Set<Record>();
 }

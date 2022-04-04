@@ -6,9 +6,11 @@ using Microsoft.Extensions.FileProviders;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddDbContext<ServicesDB>(opt => opt.UseInMemoryDatabase("ServiceList")); //service db & schema
-builder.Services.AddDbContext<SoftwareDB>(opt => opt.UseInMemoryDatabase("SoftwareList")); //software upgrades db & schema
-builder.Services.AddDbContext<RepairDB>(opt => opt.UseInMemoryDatabase("Repairlist")); //software upgrades db & schema
+builder.Services.AddDbContext<ServicesDB>(opt => opt.UseInMemoryDatabase("ServiceList")); //service db 
+builder.Services.AddDbContext<SoftwareDB>(opt => opt.UseInMemoryDatabase("SoftwareList")); //software upgrades db
+builder.Services.AddDbContext<RepairDB>(opt => opt.UseInMemoryDatabase("Repairlist")); //repair db 
+builder.Services.AddDbContext<InspectionDB>(opt => opt.UseInMemoryDatabase("Inspectionlist")); //safety inspection db
+
 
 
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -30,7 +32,7 @@ app.MapGet("/api/v1/services", async (ServicesDB db) =>
 app.MapPost("/api/v1/services", async (Record service, ServicesDB db) => {
     db.Service.Add(service);
     await db.SaveChangesAsync();
-    return Results.Created($"/products/{service.Id}", service);
+    return Results.Created($"/services/{service.Id}", service);
 });
 
 //GET COMPLETE
@@ -78,7 +80,7 @@ app.MapGet("/api/v1/software", async (SoftwareDB db) =>
 app.MapPost("/api/v1/software", async (Record software, SoftwareDB db) => {
     db.Software.Add(software);
     await db.SaveChangesAsync();
-    return Results.Created($"/products/{software.Id}", software);
+    return Results.Created($"/software/{software.Id}", software);
 });
 
 //GET COMPLETE
@@ -117,6 +119,51 @@ app.MapDelete("/api/v1/software/{id}", async (int id, SoftwareDB db) => {
 
 
 
+/* 
+ REPAIR METHODS
+*/
+app.MapGet("/api/v1/repair", async (RepairDB db) =>
+    await db.Repair.ToListAsync());
+
+app.MapPost("/api/v1/repair", async (Record repair, RepairDB db) => {
+    db.Repair.Add(repair);
+    await db.SaveChangesAsync();
+    return Results.Created($"/products/{repair.Id}", repair);
+});
+
+//GET COMPLETE
+app.MapGet("/api/v1/repair/completed", async (RepairDB db) =>
+    await db.Repair.Where(t => t.Completed).ToListAsync());
+
+//GET SPECIFIC SERVICE ITEM
+app.MapGet("/api/v1/repair/{id}", async (int id, RepairDB db) =>
+    await db.Repair.FindAsync(id)
+        is Record repair
+            ? Results.Ok(repair)
+            : Results.NotFound());
+
+//UPDATE SPECIFIC SERVICE RECORD
+app.MapPut("/api/v1/repair/{id}", async (int id, Record inputRepair, RepairDB db) => {
+    var repair = await db.Repair.FindAsync(id);
+    if (repair is null) return Results.NotFound();
+    repair.Date = inputRepair.Date;
+    repair.Completed = inputRepair.Completed;
+    repair.Fee = inputRepair.Fee;
+    repair.Tel = inputRepair.Tel;
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+
+//REMOVE SPECIFIC RECORD
+app.MapDelete("/api/v1/repair/{id}", async (int id, RepairDB db) => {
+    if (await db.Repair.FindAsync(id) is Record repair)
+    {
+        db.Repair.Remove(repair);
+        await db.SaveChangesAsync();
+        return Results.Ok(repair);
+    }
+    return Results.NotFound();
+});
 
 
 
@@ -162,7 +209,16 @@ class SoftwareDB : DbContext
 //REPAIR IN MEM DB
 class RepairDB : DbContext
 {
-    public RepairDB(DbContextOptions<SoftwareDB> options)
+    public RepairDB(DbContextOptions<RepairDB> options)
         : base(options) { }
     public DbSet<Record> Repair => Set<Record>();
+}
+
+
+//INSPECTION IN MEM DB
+class InspectionDB : DbContext
+{
+    public InspectionDB(DbContextOptions<InspectionDB> options)
+        : base(options) { }
+    public DbSet<Record> Inspection => Set<Record>();
 }

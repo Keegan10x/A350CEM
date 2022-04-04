@@ -3,6 +3,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
+
+string admin = "Basic YWRtaW46YWRtaW4xMjM=";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ServicesDB>(opt => opt.UseInMemoryDatabase("ServiceList")); //service db 
@@ -11,9 +14,13 @@ builder.Services.AddDbContext<RepairDB>(opt => opt.UseInMemoryDatabase("Repairli
 builder.Services.AddDbContext<InspectionDB>(opt => opt.UseInMemoryDatabase("Inspectionlist")); //safety inspection db
 
 
+
+
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDirectoryBrowser();
 var app = builder.Build();
+
+
 
 
 //METHODS FOR LOADING FRONTEND SPA
@@ -25,8 +32,15 @@ app.UseDefaultFiles(); app.UseStaticFiles();
 /* 
  SERVICES METHODS
 */
-app.MapGet("/api/v1/services", async (ServicesDB db) =>
-    await db.Service.ToListAsync());
+app.MapGet("/api/v1/services", async (HttpContext context, ServicesDB db) => {
+    string auth = context.Request.Headers["Authorization"].ToString();
+    if (auth != admin){
+        Console.WriteLine("FALSE############################FALSE");
+        throw new Exception("USER NOT AUTHORIZED");
+    } else { 
+    await db.Service.ToListAsync();
+    }
+});
 
 app.MapPost("/api/v1/services", async (Record service, ServicesDB db) => {
     db.Service.Add(service);

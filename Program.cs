@@ -34,8 +34,8 @@ app.UseDefaultFiles(); app.UseStaticFiles();
 */
 app.MapGet("/api/v1/services", async (HttpContext context, ServicesDB db) => {
     string auth = context.Request.Headers["Authorization"].ToString();
-    if (auth != admin){ throw new Exception("USER NOT AUTHORIZED"); }  
-    await db.Service.ToListAsync();
+    if (auth != admin){ throw new Exception("USER NOT AUTHORIZED"); } 
+    return await db.Service.ToListAsync();
 });
 
 app.MapPost("/api/v1/services", async (Record service, ServicesDB db, HttpContext context) => {
@@ -50,7 +50,7 @@ app.MapPost("/api/v1/services", async (Record service, ServicesDB db, HttpContex
 app.MapGet("/api/v1/services/completed", async (ServicesDB db, HttpContext context) => {
     string auth = context.Request.Headers["Authorization"].ToString();
     if (auth != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Service.Where(t => t.Completed).ToListAsync();
+    return await db.Service.Where(t => t.Completed).ToListAsync();
 });
 
 
@@ -96,7 +96,7 @@ app.MapDelete("/api/v1/services/{id}", async (int id, ServicesDB db, HttpContext
 */
 app.MapGet("/api/v1/software", async (SoftwareDB db, HttpContext context) => {
     if (context.Request.Headers["Authorization"].ToString() != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Software.ToListAsync();
+    return await db.Software.ToListAsync();
 });
     
 
@@ -110,7 +110,7 @@ app.MapPost("/api/v1/software", async (Record software, SoftwareDB db, HttpConte
 //GET COMPLETE SOFTWARE-UPGRADES
 app.MapGet("/api/v1/software/completed", async (SoftwareDB db, HttpContext context) => {
     if (context.Request.Headers["Authorization"].ToString() != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Software.Where(t => t.Completed).ToListAsync();
+    return await db.Software.Where(t => t.Completed).ToListAsync();
 });
    
 
@@ -153,7 +153,7 @@ app.MapDelete("/api/v1/software/{id}", async (int id, SoftwareDB db, HttpContext
 */
 app.MapGet("/api/v1/repair", async (RepairDB db, HttpContext context) => {
     if (context.Request.Headers["Authorization"].ToString() != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Repair.ToListAsync();
+    return await db.Repair.ToListAsync();
 });
     
 
@@ -167,7 +167,7 @@ app.MapPost("/api/v1/repair", async (Record repair, RepairDB db, HttpContext con
 //GET COMPLETED REPAIRS
 app.MapGet("/api/v1/repair/completed", async (RepairDB db, HttpContext context) => {
     if (context.Request.Headers["Authorization"].ToString() != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Repair.Where(t => t.Completed).ToListAsync();
+    return await db.Repair.Where(t => t.Completed).ToListAsync();
 });
     
 
@@ -210,7 +210,7 @@ app.MapDelete("/api/v1/repair/{id}", async (int id, RepairDB db, HttpContext con
 */
 app.MapGet("/api/v1/inspection", async (InspectionDB db, HttpContext context) => {
     if (context.Request.Headers["Authorization"].ToString() != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Inspection.ToListAsync();
+    return await db.Inspection.ToListAsync();
 });
 
 app.MapPost("/api/v1/inspection", async (Record inspection, InspectionDB db, HttpContext context) => {
@@ -223,7 +223,7 @@ app.MapPost("/api/v1/inspection", async (Record inspection, InspectionDB db, Htt
 //GET COMPLETE INSPECTIONS
 app.MapGet("/api/v1/inspection/completed", async (InspectionDB db, HttpContext context) => {
     if (context.Request.Headers["Authorization"].ToString() != admin) { throw new Exception("USER NOT AUTHORIZED"); }
-    await db.Inspection.Where(t => t.Completed).ToListAsync();
+    return await db.Inspection.Where(t => t.Completed).ToListAsync();
 });
 
 //GET SPECIFIC INSPECTION RECORD

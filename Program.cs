@@ -20,8 +20,15 @@ var app = builder.Build();
 
 //METHODS FOR LOADING FRONTEND SPA
 //app.MapGet("/", () => "Load Single Page Application");
-app.UseDefaultFiles(); app.UseStaticFiles();
+//app.UseDefaultFiles(); app.UseStaticFiles();
 
+
+app.UseFileServer(new FileServerOptions {
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
+    RequestPath = "",
+    EnableDefaultFiles = true
+});;
 
 
 /* 

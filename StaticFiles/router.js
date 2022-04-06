@@ -16,7 +16,7 @@ async function router(event) {
     history.pushState(null, null, event.target.href);
   }
   try {
-    -await triggerPageChange();
+    await triggerPageChange();
   } catch (err) {
     console.log(err);
   }

@@ -3,24 +3,20 @@
 	<head>
 		<meta charset="utf8" />
 		<meta name="viewport" content="width=device-width", initial-scale="1.0" />
-		<title>Single Page App</title>
+		<title>Environment App</title>
 		<link rel="stylesheet" href="style/main.css">
-		<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.min.js"></script>
+		<script src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="module" src="./router.js" defer></script>
 	</head>
 	<body>
 		<aside class="hidden"><p></p></aside>
 		<header>
-			<h1>Single Page App</h1>
 			<p>&nbsp;</p>
+			<h1>Environment Data</h1>
 		</header>
 		<nav>
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="/register">Register</a></li>
-				<li><a href="/newsurvey">New survey</a></li>
-				<li><a href="/mySurveys">My surveys</a></li>
 				<li><a href="/login">Log in</a></li>
 				<li><a href="/logout">Log out</a></li>
 			</ul>
@@ -34,8 +30,14 @@
 		</footer>
 	</body>
 	<template id="home">
-
+		<section>
+		<a href="/services">Services</a>
+		<a href="/software">Software Upgrades</a>
+		<a href="/repairs">Repairs</a>
+		<a href="/inspections">Saftey Inspections</a>
+		</section>
 	</template>
+
 	<template id="login">
 		<form name="login">
 			<p><label for="email">Username</label><br /><input type="text" name="user" placeholder="username" /></p>
@@ -43,52 +45,35 @@
 			<button type="submit">Log in</button>
 		</form>
 	</template>
-	<template id="register">
-		<form name="register">
-			<p><label for="name">Username</label><br /><input type="text" name="user" placeholder="full name" /></p>
-			<p><label for="pass">Password</label><br /><input type="password" name="pass" placeholder="password" /></p>
-			<button type="submit">Create account</button>
-		</form>
-	</template>
+
+
+
 	<template id="logout">
 			<p>Do you want to log out?</p>
 			<button>OK</button><button>Cancel</button>
-		
+	</template>
 	
-	<!-- My new templates -->
+	
 
-	</template>
-	<template id="newsurvey">
-		<form name="upload" method="post">
-			<p><label for="surveyName">Survey Name</label><br /><input type="text" name="surveyName" required/></p>
-			<p><label for="description">Survey Description</label><br /><textarea name="description" maxlength="280" required></textarea></p>
-			<input type="text" name="surveyDescription" hidden/>
-			<button type="submit">Create</button>
-		</form>
-		<!-- Render Markdown -->
-		<h3>Markdown Description</h3>
-		<article id="mkdn"></article>
-	</template>
 	
 	
-	
-	<template id="surveys">
-		<hr />
-	</template>
-	
-	
-	<template id="surveyQuestions">
+	<template id="services">
 	
 	</template>
 	
 	
-	<template id="mySurveys">
+	<template id="software">
 
 	</template>
 	
 	
-	<template id="addQuestions">
-		<main id="qcards"></main>
+	<template id="repairs">
+
+	</template>
+
+
+	<template id="inspections">
+
 	</template>
 	
 		

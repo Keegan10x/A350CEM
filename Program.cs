@@ -14,14 +14,9 @@ builder.Services.AddDbContext<RepairDB>(opt => opt.UseInMemoryDatabase("Repairli
 builder.Services.AddDbContext<InspectionDB>(opt => opt.UseInMemoryDatabase("Inspectionlist")); //safety inspection db
 
 
-
-
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDirectoryBrowser();
 var app = builder.Build();
-
-
-
 
 //METHODS FOR LOADING FRONTEND SPA
 //app.MapGet("/", () => "Load Single Page Application");
@@ -60,8 +55,6 @@ app.MapGet("/api/v1/services/{id}", async (int id, ServicesDB db, HttpContext co
         is Record service
             ? Results.Ok(service)
             : Results.NotFound());
-
-
 
 
 //UPDATE SPECIFIC SERVICE RECORD
@@ -256,6 +249,16 @@ app.MapDelete("/api/v1/inspection/{id}", async (int id, InspectionDB db, HttpCon
         return Results.Ok(inspection);
     }
     return Results.NotFound();
+});
+
+
+
+
+
+//AUTHENTICATE METHOD
+app.MapGet("/api/v1/accounts", async (InspectionDB db, HttpContext context) => {
+    if (context.Request.Headers["Authorization"].ToString() != admin) { return Results.Unauthorized(); }
+    return Results.Ok("Authorized");
 });
 
 

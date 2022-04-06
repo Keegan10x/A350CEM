@@ -14,8 +14,8 @@ export async function loadData(uri, token){
 }
 
 export function displayData(array, node, templateName, param){
-	const template = document.querySelector(templateName)
-	const fragment = template.content.cloneNode(true)
+	//const template = document.querySelector(templateName)
+	//const fragment = template.content.cloneNode(true)
 	const table = document.createElement('table')
 	const thead = document.createElement('thead')
 
@@ -68,12 +68,11 @@ export function displayData(array, node, templateName, param){
 
   const h1 = document.createElement('h1')
   h1.innerText = param
-  fragment.appendChild(h1)
-
-	fragment.appendChild(table)
-
   
-	node.appendChild(fragment)
+  
+  
+  node.appendChild(h1)
+	node.appendChild(table)
 }
 
 

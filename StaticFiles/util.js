@@ -13,27 +13,66 @@ export async function loadData(uri, token){
   return result
 }
 
-export function displayData(array, node, templateName, paramName){
+export function displayData(array, node, templateName, param){
 	const template = document.querySelector(templateName)
 	const fragment = template.content.cloneNode(true)
 	const table = document.createElement('table')
 	const thead = document.createElement('thead')
+
+  const idHeader = document.createElement('th')
+  idHeader.innerText = 'ID'
+  const completedHeader = document.createElement('th')
+  completedHeader.innerText = 'Completed'
+  const dateHeader = document.createElement('th')
+  dateHeader.innerText = 'Date'
+  const feeHeader = document.createElement('th')
+  feeHeader.innerText = 'Fee'
+  const telHeader = document.createElement('th')
+  telHeader.innerText = 'Tel'
+  
 	const tr1 = document.createElement('tr')
-	const th = document.createElement('th')
-  th.innerText = paramName
+  tr1.appendChild(idHeader)
+  tr1.appendChild(completedHeader) 
+  tr1.appendChild(dateHeader)
+  tr1.appendChild(feeHeader)
+  tr1.appendChild(telHeader)
+
+	//const th = document.createElement('th')
+  //th.innerText = paramName
 	const tbody = document.createElement('tbody')
 	for(const val of array){
 		const tr = document.createElement('tr')
-		const td = document.createElement('td')
-		td.innerText = val
-		tr.appendChild(td)
+		const idCell = document.createElement('td')
+    const completedCell = document.createElement('td')
+    const dateCell = document.createElement('td')
+    const feeCell = document.createElement('td')
+    const telCell = document.createElement('td')
+    idCell.innerText = val.id
+    completedCell.innerText = val.completed
+    dateCell.innerText = val.date
+    feeCell.innerText = val.fee
+    telCell.innerText = val.tel
+		
+		tr.appendChild(idCell)
+    tr.appendChild(completedCell)
+    tr.appendChild(dateCell)
+    tr.appendChild(feeCell)
+    tr.appendChild(telCell)
+
 		tbody.appendChild(tr)
 	}
-	tr1.appendChild(th)
+	
 	thead.appendChild(tr1)
 	table.appendChild(thead)
 	table.appendChild(tbody)
+
+  const h1 = document.createElement('h1')
+  h1.innerText = param
+  fragment.appendChild(h1)
+
 	fragment.appendChild(table)
+
+  
 	node.appendChild(fragment)
 }
 

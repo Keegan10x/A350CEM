@@ -4,6 +4,9 @@ import { customiseNavbar, file2DataURI, loadPage, secureGet, showMessage, loadDa
 
 export async function setup(node) {
 	console.log('services: setup')
+
+
+
 	try {
 		const token = localStorage.getItem('authorization')
 		if(!token)loadPage("home"); //redirect to home if not authorized
@@ -14,10 +17,8 @@ export async function setup(node) {
 		const data = await loadData(`https://localhost:7098/api/v1/services`, token)
   		console.log(data)
 		
-
+		displayData(data, node, 'template#services', 'Services')
 		//displayData(array, node, 'template#hmdt', 'Humidity')
-
-		
 	} catch(err) {
 		console.error(err)
 	}

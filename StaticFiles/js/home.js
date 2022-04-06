@@ -1,6 +1,6 @@
 /* home.js */
 
-import { customiseNavbar } from "../util.js";
+import { customiseNavbar,loadPage } from "../util.js";
 
 export async function setup(node) {
   console.log("HOME: setup");
@@ -11,6 +11,34 @@ export async function setup(node) {
     customiseNavbar(["home", "login"])
   }else{
     customiseNavbar(["home", "logout"])
+
+
+    const template = document.querySelector('template#home')
+    const fragment = template.content.cloneNode(true)
+    const servicesButton = document.createElement('a')
+    const softwareButton = document.createElement('a')
+    const repairButton = document.createElement('a')
+    const inspectionButton = document.createElement('a')
+
+    servicesButton.innerText = 'Services'
+    softwareButton.innerText = 'Software'
+    repairButton.innerText = 'Repairs'
+    inspectionButton.innerText = 'Inspections'
+
+
+    servicesButton.onclick=() => { loadPage("services") };
+    softwareButton.onclick=() => { loadPage("software") };
+    repairButton.onclick=() => { loadPage("repairs") };
+    inspectionButton.onclick=() => { loadPage("inspections") };
+
+    const section = document.createElement('section')
+    section.appendChild(servicesButton)
+    section.appendChild(softwareButton)
+    section.appendChild(repairButton)
+    section.appendChild(inspectionButton)
+
+    fragment.appendChild(section)
+    node.appendChild(fragment) 
   }
 
 

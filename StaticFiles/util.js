@@ -67,11 +67,11 @@ export function displayData(array, node, param, specificWorkitem){
 		
     const updateButton = document.createElement('a')
     const deleteButton = document.createElement('a')
-    deleteButton.innerText ='Click Me'
-    updateButton.innerText ='Click Me'
+    deleteButton.innerText ='Remove'
+    updateButton.innerText ='Edit'
     updateButton.addEventListener("click", (event) => { 
       event.preventDefault()
-      window.myGlobalVariable.serviceId = val.id
+      window.myGlobalVariable.taskId = val.id
       loadPage(specificWorkitem)
     })//disable defaul behavior
     //window.myGlobalVariable =

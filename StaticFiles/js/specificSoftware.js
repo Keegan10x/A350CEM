@@ -1,7 +1,7 @@
 import { customiseNavbar,loadPage } from "../util.js";
 
 export async function setup(node) {
-  console.log("Showing Specific Service Item");
+  console.log("Showing Specific Software Item");
   const token = localStorage.getItem("authorization");      
   console.log('LOGGING', token);
 
@@ -11,7 +11,7 @@ export async function setup(node) {
     customiseNavbar(["home", "logout"])
 
 	console.log(window.myGlobalVariable.taskId)			      
-	const uri = `https://localhost:7098/api/v1/services/${window.myGlobalVariable.taskId}`
+	const uri = `https://localhost:7098/api/v1/software/${window.myGlobalVariable.taskId}`
     const options = {
 		method: "GET",
 		headers: {
@@ -35,7 +35,7 @@ export async function setup(node) {
     //Completed
     //true
     const p1 = document.createElement('p')
-    p1.innerHTML = `<h1>Update Service Record ${window.myGlobalVariable.taskId}</h1>`
+    p1.innerHTML = `<h1>Update Software Record ${window.myGlobalVariable.taskId}</h1>`
 
     const lb1 = document.createElement('label')
     lb1.innerHTML = '<h3>True</h3>'
@@ -160,7 +160,7 @@ export async function setup(node) {
         }
         //console.log("LOGGING PUT OBJ", putObj)
 
-        const putUri = `https://localhost:7098/api/v1/services/${window.myGlobalVariable.taskId}`
+        const putUri = `https://localhost:7098/api/v1/software/${window.myGlobalVariable.taskId}`
 	    const putOptions = {
 		method: "PUT",
 		headers: {
@@ -176,7 +176,7 @@ export async function setup(node) {
 		    console.error(err)
 		    console.log("FAILED")
 	    }finally{
-		    loadPage("services")
+		    loadPage("software")
 	}
     })
 }

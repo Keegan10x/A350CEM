@@ -28,8 +28,8 @@ export async function setup(node) {
 
     servicesButton.onclick=() => { loadPage("services") };
     softwareButton.onclick=() => { loadPage("software") };
-    repairButton.onclick=() => { loadPage("repairs") };
-    inspectionButton.onclick=() => { loadPage("inspections") };
+    repairButton.onclick=() => { loadPage("repair") };
+    inspectionButton.onclick=() => { loadPage("inspection") };
 
     const section = document.createElement('section')
     section.appendChild(servicesButton)

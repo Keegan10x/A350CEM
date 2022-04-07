@@ -1,7 +1,7 @@
 import { customiseNavbar, loadPage, loadData, displayData } from '../util.js'
 
 export async function setup(node) {
-	console.log('services: setup')
+	console.log('Repairs: setup')
 
 
 
@@ -12,10 +12,10 @@ export async function setup(node) {
 		//console.log(node)
 		customiseNavbar(['home', 'logout',])
 
-		const data = await loadData(`https://localhost:7098/api/v1/services`, token)
+		const data = await loadData(`https://localhost:7098/api/v1/repair`, token)
   		console.log(data)
 		
-		displayData(data, node, 'Services', 'specificService')
+		displayData(data, node, 'Repair', 'specificRepair')
 		//displayData(array, node, 'template#hmdt', 'Humidity')
 
 
@@ -50,7 +50,7 @@ async function addRecord() {
 
 	console.log("LOGGING POSTABLE OBJECT", postObject)
 
-	const uri = "https://localhost:7098/api/v1/services"
+	const uri = "https://localhost:7098/api/v1/repair"
 	const options = {
 		method: "POST",
 		headers: {
@@ -68,7 +68,7 @@ async function addRecord() {
 		console.error(err)
 		console.log("FAILED")
 	}finally{
-		loadPage("services")
+		loadPage("repair")
 	}
 
   }

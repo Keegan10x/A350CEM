@@ -62,14 +62,6 @@
 			</p>
 
 			<p><label for="date">Date</label><br /><input type="date" name="date" placeholder=""/></p>
-			<script> 
-			const date = new Date().toISOString().replace('-', '/').split('T')[0].replace('-', '/');
-			const dateParam = document.getElementsByName("date")
-			console.log("logging the data param in form", dateParam)
-			//dateParam.innerText = date
-			dateParam[0].setAttribute('value', date);
-			</script>
-
 			<p><label for="fee">Fee</label><br /><input type="number" name="fee" placeholder=""/></p>
 			<p><label for="tel">Tel</label><br /><input type="phone" name="tel" placeholder=""/></p>
 			<button type="submit" id="add">Add Record</button>
@@ -81,19 +73,88 @@
 
 	</template>
 
+
+
+	<template id="specificSoftware">
+
+	</template>
+
+
+
+	<template id="specificRepair">
+
+	</template>
+
+
+
+	<template id="specificInspection">
+
+	</template>
+
+
+
 	
 	<template id="software">
+		<form name="addRecord">
+			<fieldset>
+			<legend>Add A New Record</legend>
 
+			<p><label for="completed">Completed</label><br />
+			<input type="radio" name="completed" value="true"> True<br>
+			<input type="radio" name="completed" value="false"> False<br>
+			</p>
+
+			<p><label for="date">Date</label><br /><input type="date" name="date" placeholder=""/></p>
+
+			<p><label for="fee">Fee</label><br /><input type="number" name="fee" placeholder=""/></p>
+			<p><label for="tel">Tel</label><br /><input type="phone" name="tel" placeholder=""/></p>
+			<button type="submit" id="add">Add Record</button>
+			</fieldset>
+		</form>
 	</template>
+
+
 	
 	
-	<template id="repairs">
+	<template id="repair">
+		<form name="addRecord">
+			<fieldset>
+			<legend>Add A New Record</legend>
 
+			<p><label for="completed">Completed</label><br />
+			<input type="radio" name="completed" value="true"> True<br>
+			<input type="radio" name="completed" value="false"> False<br>
+			</p>
+
+			<p><label for="date">Date</label><br /><input type="date" name="date" placeholder=""/></p>
+
+			<p><label for="fee">Fee</label><br /><input type="number" name="fee" placeholder=""/></p>
+			<p><label for="tel">Tel</label><br /><input type="phone" name="tel" placeholder=""/></p>
+			<button type="submit" id="add">Add Record</button>
+			</fieldset>
+		</form>
 	</template>
 
 
-	<template id="inspections">
 
+
+	<template id="inspection">
+		<form name="addRecord">
+			<fieldset>
+			<legend>Add A New Record</legend>
+
+			<p><label for="completed">Completed</label><br />
+			<input type="radio" name="completed" value="true"> True<br>
+			<input type="radio" name="completed" value="false"> False<br>
+			</p>
+
+			<p><label for="date">Date</label><br /><input type="date" name="date" placeholder=""/></p>
+
+			<p><label for="fee">Fee</label><br /><input type="number" name="fee" placeholder=""/></p>
+			<p><label for="tel">Tel</label><br /><input type="phone" name="tel" placeholder=""/></p>
+			<button type="submit" id="add">Add Record</button>
+			</fieldset>
+		</form>
 	</template>
 	
 		

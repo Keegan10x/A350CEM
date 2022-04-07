@@ -67,6 +67,7 @@ export function displayData(array, node, param, specificWorkitem){
 		
     const updateButton = document.createElement('a')
     const deleteButton = document.createElement('a')
+    deleteButton.innerText ='Click Me'
     updateButton.innerText ='Click Me'
     updateButton.addEventListener("click", (event) => { 
       event.preventDefault()
@@ -75,13 +76,28 @@ export function displayData(array, node, param, specificWorkitem){
     })//disable defaul behavior
     //window.myGlobalVariable =
     
-    
-    /*  RUNN DELETE SCRIPT HERE
-    deleteButton.addEventListener("click", (event) => { 
-      event.preventDefault() 
-      loadPage("specificServices")
-    })//disable defaul behavior
-    */
+
+    deleteButton.addEventListener("click", async (event) => { 
+      event.preventDefault()
+      const delUri = `https://localhost:7098/api/v1/${param.toLowerCase()}/${val.id}`
+      const delOptions = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/vnd.api+json",
+          "Authorization": localStorage.getItem("authorization"),
+        }
+      }
+      try{
+        const response = await fetch(delUri, delOptions)
+	      const result = await response.json();
+	      console.log(result)
+      }catch(err){
+        console.error(err)
+		    console.log("FAILED")
+      }finally{
+        loadPage(`${param.toLowerCase()}`)
+      }
+    })
 
     updateCell.appendChild(updateButton)
     deleteCell.appendChild(deleteButton)

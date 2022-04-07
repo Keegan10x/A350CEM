@@ -17,7 +17,7 @@ export async function setup(node) {
 		const data = await loadData(`https://localhost:7098/api/v1/services`, token)
   		console.log(data)
 		
-		displayData(data, node, 'template#services', 'Services')
+		displayData(data, node, 'Services', 'specificService')
 		//displayData(array, node, 'template#hmdt', 'Humidity')
 
 

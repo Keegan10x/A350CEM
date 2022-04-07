@@ -1,5 +1,5 @@
 /* home.js */
-
+window.myGlobalVariable = {}
 import { customiseNavbar,loadPage } from "../util.js";
 
 export async function setup(node) {

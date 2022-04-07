@@ -13,9 +13,8 @@ export async function loadData(uri, token){
   return result
 }
 
-export function displayData(array, node, templateName, param){
-	//const template = document.querySelector(templateName)
-	//const fragment = template.content.cloneNode(true)
+export function displayData(array, node, param, specificWorkitem){
+	
 	const table = document.createElement('table')
 	const thead = document.createElement('thead')
 
@@ -29,6 +28,12 @@ export function displayData(array, node, templateName, param){
   feeHeader.innerText = 'Fee'
   const telHeader = document.createElement('th')
   telHeader.innerText = 'Tel'
+
+  //buttons
+  const updateHeader = document.createElement('th')
+  updateHeader.innerText = 'Update'
+  const deleteHeader = document.createElement('th')
+  deleteHeader.innerText = 'Delete'
   
 	const tr1 = document.createElement('tr')
   tr1.appendChild(idHeader)
@@ -36,6 +41,9 @@ export function displayData(array, node, templateName, param){
   tr1.appendChild(dateHeader)
   tr1.appendChild(feeHeader)
   tr1.appendChild(telHeader)
+
+  tr1.appendChild(updateHeader)
+  tr1.appendChild(deleteHeader)
 
 	//const th = document.createElement('th')
   //th.innerText = paramName
@@ -47,17 +55,47 @@ export function displayData(array, node, templateName, param){
     const dateCell = document.createElement('td')
     const feeCell = document.createElement('td')
     const telCell = document.createElement('td')
+
+    const updateCell = document.createElement('td')
+    const deleteCell = document.createElement('td')
+
     idCell.innerText = val.id
     completedCell.innerText = val.completed
     dateCell.innerText = val.date
     feeCell.innerText = val.fee
     telCell.innerText = val.tel
 		
+    const updateButton = document.createElement('a')
+    const deleteButton = document.createElement('a')
+    updateButton.innerText ='Click Me'
+    updateButton.addEventListener("click", (event) => { 
+      event.preventDefault()
+      window.myGlobalVariable.serviceId = val.id
+      loadPage(specificWorkitem)
+    })//disable defaul behavior
+    //window.myGlobalVariable =
+    
+    
+    /*  RUNN DELETE SCRIPT HERE
+    deleteButton.addEventListener("click", (event) => { 
+      event.preventDefault() 
+      loadPage("specificServices")
+    })//disable defaul behavior
+    */
+
+    updateCell.appendChild(updateButton)
+    deleteCell.appendChild(deleteButton)
+
+
 		tr.appendChild(idCell)
     tr.appendChild(completedCell)
     tr.appendChild(dateCell)
     tr.appendChild(feeCell)
     tr.appendChild(telCell)
+    tr.appendChild(updateCell)
+    tr.appendChild(deleteCell)
+
+
 
 		tbody.appendChild(tr)
 	}

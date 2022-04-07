@@ -7,39 +7,40 @@ export async function setup(node) {
   const token = localStorage.getItem("authorization");      
   console.log('LOGGING', token);
 
+  const template = document.querySelector('template#home')
+  const fragment = template.content.cloneNode(true)
+  const servicesButton = document.createElement('a')
+  const softwareButton = document.createElement('a')
+  const repairButton = document.createElement('a')
+  const inspectionButton = document.createElement('a')
+
+  servicesButton.innerText = 'Services'
+  softwareButton.innerText = 'Software'
+  repairButton.innerText = 'Repairs'
+  inspectionButton.innerText = 'Inspections'
+
   if(token == null){
     customiseNavbar(["home", "login"])
+    servicesButton.onclick=() => { loadPage("home") };
+    softwareButton.onclick=() => { loadPage("home") };
+    repairButton.onclick=() => { loadPage("home") };
+    inspectionButton.onclick=() => { loadPage("home") };
   }else{
     customiseNavbar(["home", "logout"])
-
-
-    const template = document.querySelector('template#home')
-    const fragment = template.content.cloneNode(true)
-    const servicesButton = document.createElement('a')
-    const softwareButton = document.createElement('a')
-    const repairButton = document.createElement('a')
-    const inspectionButton = document.createElement('a')
-
-    servicesButton.innerText = 'Services'
-    softwareButton.innerText = 'Software'
-    repairButton.innerText = 'Repairs'
-    inspectionButton.innerText = 'Inspections'
-
-
     servicesButton.onclick=() => { loadPage("services") };
     softwareButton.onclick=() => { loadPage("software") };
     repairButton.onclick=() => { loadPage("repair") };
     inspectionButton.onclick=() => { loadPage("inspection") };
-
-    const section = document.createElement('section')
-    section.appendChild(servicesButton)
-    section.appendChild(softwareButton)
-    section.appendChild(repairButton)
-    section.appendChild(inspectionButton)
-
-    fragment.appendChild(section)
-    node.appendChild(fragment) 
   }
+
+  const section = document.createElement('section')
+  section.appendChild(servicesButton)
+  section.appendChild(softwareButton)
+  section.appendChild(repairButton)
+  section.appendChild(inspectionButton)
+
+  fragment.appendChild(section)
+  node.appendChild(fragment) 
 
 
   try {
